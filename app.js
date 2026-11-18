@@ -1,4 +1,4 @@
-const API_URL='COLE_AQUI_A_URL_DO_WEB_APP'; // URL /exec do Apps Script
+const API_URL='https://script.google.com/macros/s/AKfycbxiXyrzCbDElj-Bruq14gO6fFkyjSVze7NmHAp1z4sXecMBRzz1E0fArShHtyqE4ZEw/exec'; // URL /exec do Apps Script
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const brl=n=>(+n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}),sum=a=>a.reduce((x,y)=>x+y,0);
 let D={},T=sessionStorage.tk,page='dash',ym=new Date().toISOString().slice(0,7);
