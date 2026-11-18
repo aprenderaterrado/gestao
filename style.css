@@ -1,11 +1,11 @@
 :root{--bg:#f4f7f5;--card:#fff;--tx:#1d2b25;--mut:#6b7d74;--br:#dbe5df;--pri:#14503a;--acc:#f0a500;--bad:#c0392b;--ok:#1e8e5a}
 [data-theme=dark]{--bg:#0f1713;--card:#18241e;--tx:#e8f0ec;--mut:#98aaa1;--br:#2a3b33;--pri:#2e8b64}
 *{box-sizing:border-box}body{margin:0;font:15px system-ui,sans-serif;background:var(--bg);color:var(--tx)}[hidden]{display:none!important}
-#login{min-height:100vh;display:grid;place-items:center;background:#14503a}#lf{background:var(--card);padding:28px;border-radius:16px;width:min(340px,92vw);display:grid;gap:12px;text-align:center}#lf img{width:100%;border-radius:10px}#le{color:var(--bad);margin:0}
+#login{min-height:100vh;display:grid;place-items:center;background:#14503a}#lf{background:var(--card);padding:28px;border-radius:16px;width:min(340px,92vw);display:grid;gap:12px;text-align:center}#lf img{width:100%}#le{color:var(--bad);margin:0}
 input,select,textarea{width:100%;padding:11px;border:1px solid var(--br);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
 .btn,.ghost{padding:11px 16px;border-radius:10px;border:0;cursor:pointer;font:inherit;font-weight:600}.btn{background:var(--pri);color:#fff}.ghost{background:transparent;color:inherit;border:1px solid var(--br)}.sm{padding:5px 9px;font-size:13px}.danger{color:var(--bad)}
 #app{display:flex;min-height:100vh}aside{width:220px;background:var(--pri);color:#fff;display:flex;flex-direction:column;padding:12px;position:sticky;top:0;height:100vh;transition:.2s}aside.min{width:64px}aside.min .t,aside.min b{display:none}
-.brand{display:flex;align-items:center;gap:8px;margin-bottom:12px}.brand img{width:40px;height:40px;border-radius:8px;object-fit:cover}
+.brand{display:flex;align-items:center;gap:8px;margin-bottom:12px}.brand img{width:48px;height:40px;object-fit:contain}
 nav{flex:1;display:grid;align-content:start;gap:4px}nav a{color:#fff;padding:10px;border-radius:10px;cursor:pointer;display:flex;gap:10px;text-decoration:none;opacity:.85}nav a.on,nav a:hover{background:rgba(255,255,255,.18);opacity:1}
 aside .ghost{color:#fff;border-color:rgba(255,255,255,.3);width:100%;margin-top:6px}
 main{flex:1;min-width:0;padding:0 18px 24px}header{display:flex;gap:10px;align-items:center}h1{font-size:22px}
@@ -18,3 +18,12 @@ table{width:100%;border-collapse:collapse;background:var(--card);border-radius:1
 #toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:10px 16px;border-radius:10px;opacity:0;transition:.3s;pointer-events:none;z-index:99}#toast.on{opacity:1}
 @media(max-width:760px){aside{position:fixed;bottom:0;top:auto;height:auto;width:100%;flex-direction:row;z-index:5;padding:4px;overflow-x:auto}.brand,.foot,#tg{display:none}nav{display:flex}nav a{flex-direction:column;align-items:center;font-size:11px;padding:6px 10px}main{padding-bottom:80px}}
 @media print{aside,header button,.bar,#toast,.no{display:none!important}body{background:#fff}}
+
+#login{background:#0a5a2a url(assets/bg-login.jpg) center/cover no-repeat}
+#lf{background:#fff;border-radius:28px;padding:30px 28px 26px;width:min(380px,92vw);gap:16px;box-shadow:0 0 0 2px rgba(170,255,90,.45),0 0 45px rgba(120,255,60,.6),0 0 120px rgba(60,210,70,.5),0 25px 60px rgba(0,40,10,.45);animation:glow 3.5s ease-in-out infinite alternate}
+@keyframes glow{to{box-shadow:0 0 0 2px rgba(190,255,110,.7),0 0 65px rgba(140,255,70,.85),0 0 160px rgba(70,220,80,.65),0 25px 60px rgba(0,40,10,.45)}}
+#lf img{width:78%;margin:0 auto}#lf h2{margin:0;color:#0b4a26;font-size:26px}
+.pwbox{display:flex;align-items:center;gap:10px;padding:0 14px;border:1px solid #cfe0d5;border-radius:14px;background:#eef4f0}.pwbox input{border:0;background:transparent;color:#1d2b25;padding:14px 0;outline:0}
+#lf .btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:15px;border-radius:14px;font-size:17px;background:linear-gradient(180deg,#0f7a3b,#06401f);box-shadow:0 6px 18px rgba(6,64,31,.4)}
+#lf .btn:hover{filter:brightness(1.15)}
+@media(max-width:760px){#login{background:radial-gradient(circle at 50% 45%,#2fb24a 0,#0f7a3b 45%,#06401f 100%)}}
