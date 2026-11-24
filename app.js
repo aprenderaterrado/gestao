@@ -2,7 +2,13 @@ const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>
 const brl=n=>(+n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}),sum=a=>a.reduce((x,y)=>x+y,0);
 let D={},T=sessionStorage.tk,page='dash',ym=new Date().toISOString().slice(0,7);
 const toast=m=>{const t=$('#toast');t.textContent=m;t.className='on';setTimeout(()=>t.className='',2800)};
-async function api(a,p={}){const r=await fetch(API_URL,{method:'POST',body:JSON.stringify({a,t:T,...p})}),j=await r.json();if(!j.ok){if(j.err==='auth')logout();throw new Error(j.err)}return j.d}
+async function api0(a,p={}){const r=await fetch(API_URL,{method:'POST',body:JSON.stringify({a,t:T,...p})}),j=await r.json();if(!j.ok){if(j.err==='auth')logout();throw new Error(j.err)}return j.d}
+let busy=0,lt,rot;
+const MSG=['Abrindo o caderno…','Conferindo os alunos…','Somando as mensalidades…','Organizando as aulas…','Quase lá…'],ONE={login:'Entrando…',save:'Salvando…',del:'Excluindo…',dash:'Calculando…',gerar:'Gerando mensalidades…',fechar:'Fechando o mês…',vinc:'Salvando vínculos…'};
+function loading(on,a){busy+=on?1:-1;if(busy<0)busy=0;clearTimeout(lt);
+ if(busy>0){if(!$('#loader').hidden)return;lt=setTimeout(()=>{$('#loader').hidden=false;const m=ONE[a];if(m){$('#lm').textContent=m;return}let i=0;$('#lm').textContent=MSG[0];clearInterval(rot);rot=setInterval(()=>{i=Math.min(i+1,MSG.length-1);$('#lm').textContent=MSG[i]},1800)},150)}
+ else{clearInterval(rot);$('#loader').hidden=true}}
+async function api(a,p={}){loading(1,a);try{return await api0(a,p)}finally{loading(0)}}
 const nm=(t,id)=>(D[t].find(x=>x.id==id)||{}).nome||'—';
 const opt=(t,f)=>()=>D[t].filter(f||(()=>1)).map(x=>[x.id,x.nome]);
 const cfgL=k=>()=>String(D.cfg[k]).split(',').map(x=>[x.trim(),x.trim()]);
