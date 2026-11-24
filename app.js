@@ -1,4 +1,3 @@
-const API_URL='https://script.google.com/macros/s/AKfycbxiXyrzCbDElj-Bruq14gO6fFkyjSVze7NmHAp1z4sXecMBRzz1E0fArShHtyqE4ZEw/exec'; // URL /exec do Apps Script
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const brl=n=>(+n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}),sum=a=>a.reduce((x,y)=>x+y,0);
 let D={},T=sessionStorage.tk,page='dash',ym=new Date().toISOString().slice(0,7);
@@ -14,7 +13,7 @@ const M={
  aulas:{t:'Aulas',s:'Aulas',c:['data','_aluno','_prof','qtd','duracao','status'],f:[['aluno_id','Aluno','select',opt('Alunos',a=>a.status=='ativo')],['professor_id','Professor','select',opt('Professores',p=>p.status=='ativo')],['data','Data','date'],['qtd','Quantidade de aulas','number'],['duracao','Duração (min)','number'],['status','Situação','select',()=>[['realizada','Realizada'],['cancelada','Cancelada'],['reposicao','Reposição']]],['obs','Observações','textarea']],d:{data:today(),qtd:1,duracao:60,status:'realizada'},sort:'data'},
  despesas:{t:'Despesas',s:'Despesas',c:['descricao','categoria','valor','vencimento','tipo','status'],f:[['descricao','Descrição','text'],['categoria','Categoria','select',cfgL('categorias')],['valor','Valor (R$)','number'],['vencimento','Vencimento','date'],['pagamento','Data de pagamento','date'],['tipo','Tipo','select',()=>[['fixa','Fixa'],['variavel','Variável']]],['status','Status','select',()=>[['pendente','Pendente'],['paga','Paga']]],['obs','Observações','textarea']],d:{vencimento:today(),tipo:'variavel',status:'pendente'},sort:'vencimento',rec:1}
 };
-const NAV=[['dash','📊','Início'],['professores','👩‍🏫','Professores'],['alunos','🎒','Alunos'],['aulas','📝','Aulas'],['mens','💰','Mensalidades'],['despesas','🧾','Despesas'],['res','⚖️','Resultado'],['cfg','⚙️','Config']];
+const NAV=[['dash','📊','Início'],['professores','👩‍🏫','Professores'],['alunos','🎒','Alunos'],['aulas','📝','Aulas'],['mens','💰','Mensalidades'],['despesas','🧾','Despesas'],['res','⚖️','Resultado'],['cfg','⚙️','Config'],['ajuda','❓','Ajuda']];
 const TTL=Object.fromEntries(NAV.map(n=>[n[0],n[2]]));
 function cell(m,r,k){if(k=='_aluno')return esc(nm('Alunos',r.aluno_id));if(k=='_prof')return r.professor_id?esc(nm('Professores',r.professor_id)):esc(D.Vinculos.filter(v=>v.aluno_id==r.id).map(v=>nm('Professores',v.professor_id)).join(', '));
  const v=r[k];if(['valor','mensalidade'].includes(k))return brl(v);if(k=='status')return `<span class="tag ${esc(v)}">${esc(v)}</span>`;return esc(v)}
@@ -67,8 +66,9 @@ function cfgPage(){const c=D.cfg,F=[['escola_nome','Nome da escola'],['preco','V
  $('#view').innerHTML=`<form id="cf" class="cards" style="grid-template-columns:repeat(auto-fit,minmax(260px,1fr))">${F.map(([k,l])=>`<label>${l}<input name="${k}" value="${esc(c[k])}"></label>`).join('')}<div class="bar"><button class="btn">Salvar configurações</button><button type="button" class="ghost" id="pw2">Trocar senha</button></div></form>`;
  $('#cf').onsubmit=async e=>{e.preventDefault();const o=Object.fromEntries(new FormData(e.target));if(+o.preco!=+o.escola+ +o.professor&&!confirm('Escola + professor ≠ valor da aula. Salvar mesmo assim?'))return;if(+o.s1_pct+ +o.s2_pct!=100)return toast('As porcentagens devem somar 100%');try{await api('cfg',{c:o});await reload();toast('Configurações salvas ✔')}catch(x){toast(x.message)}};
  $('#pw2').onclick=async()=>{const n=prompt('Nova senha (mín. 6 caracteres):');if(n)try{await api('senha',{novo:n});toast('Senha alterada')}catch(x){toast(x.message)}}}
-async function render(){$('#ttl').textContent=TTL[page];[...$('#nav').children].forEach(a=>a.classList.toggle('on',a.dataset.p==page));
- try{if(M[page])listPage(page);else if(page=='mens')mensPage();else if(page=='dash')await dashPage();else if(page=='res')await resPage();else cfgPage()}catch(x){toast(x.message)}}
+let helpOpen='';
+async function render(){$('#ttl').innerHTML=esc(TTL[page])+(page=='ajuda'?'':' <button class="ghost sm" data-h>❓ Ajuda desta tela</button>');$('#ttl').onclick=e=>{if(e.target.dataset.h!==undefined){helpOpen=page;page='ajuda';render()}};[...$('#nav').children].forEach(a=>a.classList.toggle('on',a.dataset.p==page));
+ try{if(M[page])listPage(page);else if(page=='mens')mensPage();else if(page=='dash')await dashPage();else if(page=='res')await resPage();else if(page=='ajuda')helpPage(helpOpen);else cfgPage()}catch(x){toast(x.message)}}
 async function reload(){D=await api('load');render()}
 function logout(){sessionStorage.removeItem('tk');T=null;$('#app').hidden=true;$('#login').hidden=false}
 async function start(){$('#login').hidden=true;$('#app').hidden=false;$('#nav').innerHTML=NAV.map(n=>`<a data-p="${n[0]}"><span>${n[1]}</span><span class="t">${n[2]}</span></a>`).join('');$('#nav').onclick=e=>{const a=e.target.closest('a');if(a){page=a.dataset.p;render()}};try{await reload()}catch(x){toast(x.message)}}
