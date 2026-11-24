@@ -9,7 +9,7 @@ function setup(){const s=ss_(),P=PropertiesService.getScriptProperties();
  const d=s.getSheetByName('Página1')||s.getSheetByName('Sheet1');if(d)s.deleteSheet(d);
  if(!P.getProperty('ADMIN_PASS'))P.setProperty('ADMIN_PASS','aprender123'); // TROQUE nas Propriedades do script
  const c=s.getSheetByName('Configuracoes');if(c.getLastRow()<2)for(const k in DEF)c.appendRow([k,DEF[k]]);
- if(!ScriptApp.getProjectTriggers().some(t=>t.getHandlerFunction()=='backup'))ScriptApp.newTrigger('backup').timeBased().everyWeeks(1).create();
+ if(!ScriptApp.getProjectTriggers().some(t=>t.getHandlerFunction()=='backup'))ScriptApp.newTrigger('backup').timeBased().onWeekDay(ScriptApp.WeekDay.SUNDAY).atHour(3).create();
  Logger.log(s.getUrl())}
 function backup(){DriveApp.getFileById(ss_().getId()).makeCopy('Backup Aprender '+Utilities.formatDate(new Date(),TZ,'yyyy-MM-dd'))}
 function out_(d){return ContentService.createTextOutput(JSON.stringify({ok:true,d:d})).setMimeType(ContentService.MimeType.JSON)}
